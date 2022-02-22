@@ -24,3 +24,23 @@ const { abi, evm } = require('../compile');
 let accounts;
 let lottery;
 
+
+// some common process that needs to be carried out during each 'it' function
+beforeEach(async () => {
+    // Since web3 is used for all kinds of things and 
+    // not just ethereum, so eth is a module in it
+    
+    // Things with web3 are quick but asynchronous
+    // That is why we are using async/await
+    
+    // Get a list of all accounts
+    accounts = await web3.eth.getAccounts();
+
+    //Creating the contract instance
+    lottery = await new web3.eth.Contract(abi)
+        .deploy({
+            data: evm.bytecode.object,
+        })
+        .send({ from: accounts[0], gas: '1000000' });
+    
+});
