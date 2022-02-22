@@ -85,5 +85,32 @@ describe('Lottery Contract', () => {
         assert.equal(accounts[1], players[1]);
         assert.equal(2, players.length);
     });
+    
+    // Try and catch assertions
+
+    // When we are using the asynchronous code, like async/await
+    // we can use try/catch to look for errors
+    it('requires a min amount of ether to enter', async () => {
+        // How try catch work is that JavaScript will run the 
+        // code inside try block, if everything is fine, code will
+        // execute and finish. If something goes wrong, the interpreter
+        // will run the code inside the catch block
+        try {
+            // Here we deliberately want that this call should 
+            // end in an error so that we reach catch block
+            await lottery.methods.enter().send({
+                from : accounts[0],
+                value: 10
+            });
+
+            // If upto here it does not throw an error
+            // the following statement is going to throw error
+            assert(false);
+            // the whole point of this line is that if we get upto
+            // this point in code, we automatically fail the test
+        } catch (err) {
+            assert(err);
+        }
+    });
 });
 
